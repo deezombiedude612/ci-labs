@@ -76,6 +76,9 @@ def generatePopulation(pop_size, pop_min, pop_max):
 # Fitness Calculation
 # calculates the fitness of a chromosome from the decimal value of the chromosome
 def calculateFitness(value):
+    if(value == 0):
+        return 0
+
     # get number of squares that can be cut from paper with given square dimensions
     # assume 20cm x 15cm
     dim1 = 20
@@ -148,7 +151,7 @@ def findOverallDistance(chromosomes):
     total = 0
 
     for iter in range(len(chromosomes)):
-        total += chromosomes[iter]
+        total += calculateFitness(chromosomes[iter])
 
     return total / len(chromosomes)
 
@@ -165,10 +168,11 @@ if __name__ == "__main__":
     # initialize population
     population = []
     population.append(generatePopulation(pop_size, pop_min, pop_max))
-    print("Chromosome Population:", population)
+    print("Chromosome Population:", population, "\n")
 
-    while (curr_iter < max_iter and findOverallDistance(population[-1]) > min_overalldistance):
+    while curr_iter < max_iter and findOverallDistance(population[-1]) > min_overalldistance:
         curr_iter += 1
+        print("Population", curr_iter, "\t:", population[-1])
 
         # select parent pairs
         parents = selectParents(population[-1], len(population[-1]))
@@ -185,3 +189,5 @@ if __name__ == "__main__":
 
         # update current population
         population.append(mutated)
+
+        # print("Generation", curr_iter, ": \tFitness:", )
