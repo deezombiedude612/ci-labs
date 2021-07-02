@@ -19,7 +19,7 @@ def value2gray(value):
 # convert gray code to decimal equivalent
 def gray2value(gray):
     value = 0
-    binaryPower = 0
+    binary_power = 0
 
     """
     Reference: https://youtu.be/cbmh1DPPQyI
@@ -35,50 +35,80 @@ def gray2value(gray):
     # obtain binary number
     for index in range(len(gray)):
         if(index == 0):
-            binaryNumber = gray[0]
+            binary_number = gray[0]
 
         else:
-            if gray[index] != binaryNumber[index - 1]:
-                binaryNumber += "1"
+            if gray[index] != binary_number[index - 1]:
+                binary_number += "1"
             else:
-                binaryNumber += "0"
+                binary_number += "0"
 
-    print("Binary number: " + binaryNumber)
+    print("Binary number: " + binary_number)
 
     # convert to decimal
-    for digit in binaryNumber[::-1]:
+    for digit in binary_number[::-1]:
         if(digit == '1'):
-            value = value + pow(2, binaryPower)
+            value = value + pow(2, binary_power)
 
-        binaryPower += 1
+        binary_power += 1
 
     return value
 
 
-# Population Initialization
-# this function generates the first generation randomly based on the population size and the range of the value of each chromosome
+# Population Initialization:
+# generates the first generation randomly based on the population size
+# and the range of the value of each chromosome
 def generatePopulation(pop_size, pop_min, pop_max):
     population = []
 
-    # create a chromosome population of size pop_size with each value between pop_min and pop_max
-    for chromosomeIndex in range(pop_size):
+    # create a chromosome population of size pop_size with each value
+    # between pop_min and pop_max
+    for chromosome_index in range(pop_size):
         population.append(random.randrange(pop_min, pop_max + 1))
 
     return population
 
 
 # Fitness Calculation
-# this function calculates the fitness of a chromosome from the decimal value of the chromosome
+# calculates the fitness of a chromosome from the decimal value of the chromosome
 def calculateFitness(value):
-    # get number of squares that can be cut from paper with given square dimensions?
+    # get number of squares that can be cut from paper with given square dimensions
+    # assume 20cm x 15cm
+    dim1 = 20
+    dim2 = 15
 
-    return fitness
+    return (dim1 * dim2) // (value ** 2)    # just get integer value will do
+
+
+# Parent Selection
+def selectParents(chromosomes, pop_size):
+    parent_pairs = []
+    for iter in range(pop_size // 2):
+        chromosome_pair = []
+        first_chromosome_index = random.randrange(0, len(chromosomes))
+        second_chromosome_index = first_chromosome_index
+        while second_chromosome_index == first_chromosome_index:
+            second_chromosome_index = random.randrange(0, len(chromosomes))
+
+        chromosome_pair.append(chromosomes[first_chromosome_index])
+        chromosome_pair.append(chromosomes[second_chromosome_index])
+
+        # append new chromosome pair to parent_pair
+        parent_pairs.append(chromosome_pair)
+
+    return parent_pairs
+
+
+# Crossover
+# performs crossover on a parent pair to perform one-point crossover to produce
+# a pair of offspring
+def crossover(parents):
+    offsprings = []
+
+    return offsprings
 
 
 if __name__ == "__main__":
-    # print(value2gray(10))      # 1111
-    # print(gray2value("1001"))  # 14
-
     pop_size = 10
     pop_min = 1
     pop_max = 10
@@ -88,6 +118,5 @@ if __name__ == "__main__":
     p_mutation = 0.05
 
     # initialize population
-    # print(generatePopulation(8, 0, 10))
     population = generatePopulation(pop_size, pop_min, pop_max)
     print("Chromosome Population:", population)
